@@ -4,6 +4,7 @@
 ## Redux (single point of truth)
 - ไม่ต้องส่ง props
 - redux = context+Reducer
+
 ## Setup tailwind
 
 
@@ -120,8 +121,8 @@ ACTION =  Javascript Object
   }
 
 }
-``
-เวลา Dispatch จะส่ง action ไปด้วย action จะมี  ข้อมูลของdata ไป กระทำ
+```
+*เวลา Dispatch จะส่ง action ไปด้วย action จะมี  ข้อมูลของdata ไป กระทำ
 
 
 7 import use dispatch to app.jsx
@@ -154,7 +155,7 @@ export const { increase, decrease, reset} = counterSlice.actions; // export func
 ```
 
 
-import function มาใช้ ที่ app.jsx
+9 import function มาใช้ ที่ app.jsx
 
 ```
 import {increase} from './counterSlice'

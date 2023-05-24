@@ -215,3 +215,121 @@ app.jsx
        onClick={()=>dispatch(increaseWithNum(5))}
 
 ```       
+
+# Authenticate--------------------------------
+
+In authSlice.js
+```
+import { createSlice } from '@reduxjs/toolkit'
+
+
+const initialState = {
+    user: null,
+    token: '',
+    isAdmin: false,
+}
+
+const authSlice = createSlice({
+    name: 'auth',
+    initialState: initialState,
+    reducers: {},
+});
+
+export default authSlice.reducer; //export to store
+```
+In store.js
+```
+import { configureStore } from "@reduxjs/toolkit";
+import counterReducer from './counterSlice'
+import authReducer from './authSlice'
+
+
+export default configureStore({
+    // บอกว่า Store เรามีกี่ slice
+    reducer: {
+        auth: authReducer,
+        counter: counterReducer,
+    },
+});
+```
+
+add to app.jsx
+
+```
+  <div className="mt-12 text-center">
+        {auth.user ? (
+          <h1 className="my-4">
+            user: {auth.user.firstName}, {auth.user.lastName}
+          </h1>
+        ) : (
+          <h1 className="my-4"> you are guest</h1>
+        )}
+        <button
+          children
+          className="bg-slate-300 px-4 py-2 rouded-sm"
+          onClick={() =>
+            dispatch(login({ username: "codecamp14", password: "0000" }))
+          }
+        >
+          login
+        </button>
+
+        <button
+          children
+          className="bg-slate-300 px-4 py-2 rouded-sm"
+          onClick={() => dispatch(logout())}
+        >
+          logout
+        </button>
+      </div>
+```
+add use selector to app.jsx
+```
+
+   const counter = useSelector(state => state.auth)
+
+   ```
+   import
+```
+   import { login, logout} from "./authSlice";
+
+```
+
+authSlice.js
+
+```
+const authSlice = createSlice({
+    name: 'auth',
+    initialState: initialState,
+    reducers: {
+        login: (state, action) => {
+         const { username, password} = action.payload;
+         if(username == "codecamp14" && password == "0000") {
+            state.user = { userId: 1, firstName: 'Codecamp', lastName: 'Softwarepark'};
+            state.token = 'mocktoken';
+            state.isAdmin = true;
+         }
+        },
+        logout: (state, action) => {
+            state.user = null;
+            state.token = '';
+            state.isAdmin = false;
+
+        },
+    },
+});
+
+export const { login, logout } = authSlice.actions;
+
+export default authSlice.reducer; //export to store
+```
+
+
+## install axios
+ npm i axios
+
+ ## import axios to authSlice
+```
+ import axios from 'axios';
+
+ ```

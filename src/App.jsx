@@ -1,102 +1,89 @@
-import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { increase, decrease, reset, increaseWithNum } from "./counterSlice";
-import { login, logout, userLogin} from "./authSlice";
-function App() {
-  //STATE
-  //const [count, setCount] = useState(0);  // set stat เริ่มต้น 0 เพื่อเตรียม + stat /จะสัมพันกับ type เช่น ถ้าเริ่มต้นเปน string ก็เอาไป + ไม่ได้
+import { Component } from 'react';
 
-  // ดึงค่าจาก store มาใช้ ผ่าน use seletor
-  const counter = useSelector((state) => state.counter);
-  const auth = useSelector((state) => state.auth);
-  //console.log(counter)
+class Content extends Component {
+    componentWillUnmount() {
+        console.log("I'm Dead");
+    }
+    render() {
+        return <h1>Content</h1>;
+    }
+}
 
-  //เรียกใช้ Dispatch มาใช้งาน
-  const dispatch = useDispatch(); // 1  UI ทำแค่ครั้งเดียว
+class App extends Component {
+    // #1 Constructor
+    constructor(props) {
+        super(props);
+        //     this.state = { count: 10, error: '' };
+        this.handleReset = this.handleReset.bind(this); // this == App
+    }
 
-  //LOGIC
-  //const increase = () => setCount((p) => p + 1);
-  //const decrease = () => setCount((p) => -1);
-  //const reset = () => setCount(0);
+    // #2 : ใส่เหมือนเป็น property
+    state = { count: 0, error: 'no-error' };
 
-  //UI DISPLAY
-  return (
-    <div>
-      <div className="flex flex-col items-center gap-2">
-        <h1 className="text-2xl">Redux 😄</h1>
-        <h3>Count : {counter.count} </h3>
-        <div className="flex gap-4">
-          <button
-            children
-            className="bg-slate-300 px-4 py-2 rouded-sm"
-            onClick={() => dispatch(decrease())}
-          >
-            -
-          </button>
-          <button
-            children
-            className="bg-slate-300 px-4 py-2 rouded-sm"
-            onClick={() => dispatch(reset())}
-          >
-            reset
-          </button>
-          {/* ส่ง update ผ่าน Dispatch ตรงๆไปหา CounterSlice */}
-          <button
-            children
-            className="bg-slate-300 px-4 py-2 rouded-sm"
-            onClick={() => dispatch(increase())}
-          >
-            +
-          </button>
-        </div>
-        {/* ส่ง update ผ่าน Dispatch ตรงๆไปหา CounterSlice  add payload*/}
-        {/* <button
-            children
-            className="bg-slate-300 px-4 py-2 rouded-sm"
-            onClick={()=>dispatch(increaseWithNum(5))}
-          >
-            Increse with 5
-          </button> */}
+    handleReset() {
+        // console.log(this);
+        this.setState({ count: 0 });
+    }
 
-        {/* ส่งแแบบ obj */}
-        <button
-          children
-          className="bg-slate-300 px-4 py-2 rouded-sm"
-          onClick={() =>
-            dispatch(increaseWithNum({ value: 5, error: "not error" }))
-          }
-        >
-          Increse with 5
-        </button>
-      </div>
-      <div className="mt-12 text-center">
-        {auth.user ? (
-          <h1 className="my-4">
-            user: {auth.user.firstName}, {auth.user.lastName}
-          </h1>
-        ) : (
-          <h1 className="my-4"> you are guest</h1>
-        )}
-        <button
-          children
-          className="bg-slate-300 px-4 py-2 rouded-sm"
-          onClick={() =>
-            dispatch(userLogin())
-          }
-        >
-          login
-        </button>
+    componentDidMount() {
+        console.log('Didmount');
+        // ใช้เรียก API
+    }
+    // useEffect(()=>{},[])
 
-        <button
-          children
-          className="bg-slate-300 px-4 py-2 rouded-sm"
-          onClick={() => dispatch(logout())}
-        >
-          logout
-        </button>
-      </div>
-    </div>
-  );
+    componentDidUpdate() {
+        console.log('Did update');
+    }
+    // useEffect(()=>{},[state])
+
+    // UI
+    // render :function () {return JSX}
+    render() {
+        // console.log(this);
+        return (
+            <div className='text-center my-12'>
+                <h1>Counter : {this.state.count}</h1>
+                <div className='flex gap-4 justify-center my-2'>
+                    <button
+                        onClick={() => {
+                            // console.log(this);
+                            this.setState({ count: this.state.count - 1 });
+                        }}
+                    >
+                        -
+                    </button>
+                    <button onClick={this.handleReset}>reset</button>
+                    <button
+                        onClick={() => {
+                            this.setState({ count: this.state.count + 1 }); // Merge เข้ากับ state เดิม
+                        }}
+                    >
+                        +
+                    </button>
+                </div>
+                {this.state.count == 5 ? '' : <Content />}
+            </div>
+        );
+    }
 }
 
 export default App;
+
+// function User(firstName) {
+//     // this = {}
+//     this.firstName = firstName; // {firstName: "...."}
+//     this.isAdmin = false; // {firstName:"...", isAdmin : false}
+//     // return this
+// }
+
+// const userOne = new User('Pavit');
+// // <User/>
+
+// Function declaration
+// function add (x,y) {
+// return x+y
+// }
+
+// Function expression
+// const a = function(x,y) {return x+y}
+// const b = (x,y) => x+y
